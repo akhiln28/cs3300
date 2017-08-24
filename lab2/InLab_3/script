@@ -1,0 +1,5 @@
+#! /bin/sh
+lex expression.l
+bison -d expression.y
+gcc lex.yy.c expression.tab.c
+./a.out <input.txt

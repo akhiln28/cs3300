@@ -1,0 +1,56 @@
+Script started on Thursday 24 August 2017 10:19:23 AM IST
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2/InLab_3[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2/InLab_3[00m$ ls
+[0m[01;32ma.out[0m         expression.tab.c  [01;32mexpression.y[0m  lex.yy.c  typescript
+[01;32mexpression.l[0m  expression.tab.h  input.txt     [01;32mscript[0m
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2/InLab_3[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2/InLab_3[00m$ ./a.out < input.txt 
+Segmentation fault (core dumped)
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2/InLab_3[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2/InLab_3[00m$ s[K./a[Kscript 
+expression.y:76 parser name defined to default :"parse"
+[01m[K/usr/share/bison++/bison.cc:[m[K In function ‘[01m[Kyyparse[m[K’:
+[01m[K/usr/share/bison++/bison.cc:198:24:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kyyerror[m[K’ [-Wimplicit-function-declaration]
+ #define YY_@_ERROR yyerror
+[01;32m[K                        ^[m[K
+[01m[K/usr/share/bison++/bison.cc:667:4:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KYY_parse_ERROR[m[K’
+    YY_@_ERROR("parser stack overflow");
+[01;32m[K    ^[m[K
+Test
+TEST1Test
+TEST1Test
+TEST1Test
+Segmentation fault (core dumped)
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2/InLab_3[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2/InLab_3[00m$ ./a[Kscript 
+expression.y:75 parser name defined to default :"parse"
+[01m[K/usr/share/bison++/bison.cc:[m[K In function ‘[01m[Kyyparse[m[K’:
+[01m[K/usr/share/bison++/bison.cc:198:24:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kyyerror[m[K’ [-Wimplicit-function-declaration]
+ #define YY_@_ERROR yyerror
+[01;32m[K                        ^[m[K
+[01m[K/usr/share/bison++/bison.cc:667:4:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KYY_parse_ERROR[m[K’
+    YY_@_ERROR("parser stack overflow");
+[01;32m[K    ^[m[K
+Test
+Test
+Test
+Test
+Segmentation fault (core dumped)
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2/InLab_3[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2/InLab_3[00m$ ./a[Kscript 
+expression.y:74 parser name defined to default :"parse"
+[01m[K/usr/share/bison++/bison.cc:[m[K In function ‘[01m[Kyyparse[m[K’:
+[01m[K/usr/share/bison++/bison.cc:198:24:[m[K [01;35m[Kwarning: [m[Kimplicit declaration of function ‘[01m[Kyyerror[m[K’ [-Wimplicit-function-declaration]
+ #define YY_@_ERROR yyerror
+[01;32m[K                        ^[m[K
+[01m[K/usr/share/bison++/bison.cc:667:4:[m[K [01;36m[Knote: [m[Kin expansion of macro ‘[01m[KYY_parse_ERROR[m[K’
+    YY_@_ERROR("parser stack overflow");
+[01;32m[K    ^[m[K
+TEST
+TEST
+TEST
+Segmentation fault (core dumped)
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2/InLab_3[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2/InLab_3[00m$ cd ..
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2[00m$ ls
+[0m[01;32ma.out[0m         expression.l~  expression.y~  [01;31mInLab_3.tar.gz[0m  test.l
+expression.l  expression.y   [01;34mInLab_3[0m        lex.yy.c
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2[00m$ ps[K[Kkill asl[K[K[K[K[K[K[K[Ksbl[K[Kubl 
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2[00m$ ls
+[0m[01;32ma.out[0m         expression.l~  expression.y~  [01;31mInLab_3.tar.gz[0m  test.l
+expression.l  expression.y   [01;34mInLab_3[0m        lex.yy.c
+]0;akhil@akhil-Inspiron-5559: ~/mega/sem5/cs3300/lab2[01;32makhil@akhil-Inspiron-5559[00m:[01;34m~/mega/sem5/cs3300/lab2[
