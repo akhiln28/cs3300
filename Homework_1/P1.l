@@ -5,8 +5,8 @@
 
 %%
 [ \t\n]	;	//ignoring tabs,spaces,newlines
-\/\/.*\n;	//ignoring singleline comments
-\/\*.*\*\/	//ignoring multiline comments
+\/\/.*	{;}	//ignoring singleline comments
+\/\*.*\*\/	{;}//ignoring multiline comments
 \(		{printf("(\n");return LPAREN;}
 \)		{printf(")\n");return RPAREN;}
 \{		{printf("{\n");return LFPAREN;}
