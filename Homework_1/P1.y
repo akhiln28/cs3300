@@ -28,7 +28,7 @@
 %type <str> TypeDeclarationStar
 %type <str> Type
 %%
-goal :		Statement	{printf("Found Macros\n");}
+goal :		MacroDefinationstar MainClass TypeDeclarationStar	{printf("Found Macros\n");}
 ;
 MainClass :	CLASS IDENTIFIER LFPAREN PUBLIC STATIC VOID MAIN LPAREN STRING LSPAREN RSPAREN
 			IDENTIFIER RPAREN LFPAREN SYSTEM LPAREN Expression RPAREN SCOLON RFPAREN RFPAREN

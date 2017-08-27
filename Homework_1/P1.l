@@ -48,7 +48,7 @@ boolean {printf("boolean\n");return BOOL;}
 "System.out.println" 		{printf("System\n");return SYSTEM;}
 "."		{printf(".\n");return DOT;}
 ".length"	{printf("length\n");return LENGTH;}
-[a-zA-Z][a-zA-Z0-9]*	{printf("id\n");yylval.str = strdup(yytext);return IDENTIFIER;}
+[a-zA-Z][a-zA-Z0-9_]*	{printf("id\n");yylval.str = strdup(yytext);return IDENTIFIER;}
 0|[1-9][0-9]*			{printf("num\n");yylval.str = strdup(yytext);return NUM;}
 .			{printf("other charactor\n");return OTHER;}
 %%
