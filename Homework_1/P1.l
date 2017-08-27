@@ -31,7 +31,7 @@ main 	{printf("main\n");return MAIN;}
 new 	{printf("new\n");return NEW;}
 this	{printf("this\n");return THIS;}
 extends {printf("extends\n");return EXTENDS;}
-#define	{printf("#define\n");return DEFINE;}
+#define	{printf("define\n");return DEFINE;}
 true	{printf("true\n");return TRUE;}
 false 	{printf("false\n");return FALSE;}
 int		{printf("int\n");return KINT;}

@@ -1010,7 +1010,7 @@ YY_RULE_SETUP
 case 28:
 YY_RULE_SETUP
 #line 34 "P1.l"
-{printf("#define\n");return DEFINE;}
+{printf("define\n");return DEFINE;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
