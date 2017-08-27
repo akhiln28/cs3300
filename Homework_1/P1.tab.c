@@ -417,7 +417,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   16
+#define YYLAST   15
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  44
@@ -426,7 +426,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  3
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  20
+#define YYNSTATES  19
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -522,7 +522,7 @@ static const yytype_uint16 yytoknum[] =
 static const yytype_int8 yypact[] =
 {
       -4,   -41,     2,   -42,    -7,   -42,   -18,   -17,   -19,   -16,
-      -1,   -33,    -2,     0,   -31,     3,     4,   -23,     8,   -42
+      -1,   -33,    -2,     0,   -31,     3,     4,   -23,   -42
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -531,7 +531,7 @@ static const yytype_int8 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     0,     0,     2,     0,     1,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     3
+       0,     0,     0,     0,     0,     0,     0,     0,     3
 };
 
   /* YYPGOTO[NTERM-NUM].  */
@@ -552,13 +552,13 @@ static const yytype_int8 yydefgoto[] =
 static const yytype_uint8 yytable[] =
 {
        1,     4,     5,     6,     7,     9,     8,    11,    12,    10,
-      13,    15,    16,    14,    17,    18,    19
+      13,    15,    16,    14,    17,    18
 };
 
 static const yytype_uint8 yycheck[] =
 {
        4,    42,     0,    10,    22,    24,    23,     8,    41,    25,
-      12,    42,     9,    13,    10,    38,     8
+      12,    42,     9,    13,    10,    38
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -566,7 +566,7 @@ static const yytype_uint8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,     4,    45,    46,    42,     0,    10,    22,    23,    24,
-      25,     8,    41,    12,    13,    42,     9,    10,    38,     8
+      25,     8,    41,    12,    13,    42,     9,    10,    38
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -578,7 +578,7 @@ static const yytype_uint8 yyr1[] =
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,    16
+       0,     2,     1,    15
 };
 
 
