@@ -81,11 +81,12 @@ extern int yydebug;
     DOT = 291,
     LENGTH = 292,
     SYSTEM = 293,
-    KINT = 294,
+    INT = 294,
     OTHER = 295,
     IDENTIFIER = 296,
-    INT = 297,
-    STRING = 298
+    NUM = 297,
+    STRING = 298,
+    RETURN = 299
   };
 #endif
 
@@ -98,7 +99,7 @@ union YYSTYPE
 
 	char *str;
 
-#line 102 "P1.tab.h" /* yacc.c:1909  */
+#line 103 "P1.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

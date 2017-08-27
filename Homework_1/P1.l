@@ -4,7 +4,9 @@
 %}
 
 %%
-[ \t\n]	;
+[ \t\n]	;	//ignoring tabs,spaces,newlines
+\/\/.*\n;	//ignoring singleline comments
+\/\*.*\*\/	//ignoring multiline comments
 \(		{printf("(\n");return LPAREN;}
 \)		{printf(")\n");return RPAREN;}
 \{		{printf("{\n");return LFPAREN;}
@@ -28,13 +30,14 @@ public 	{printf("public\n");return PUBLIC;}
 static 	{printf("static\n");return STATIC;}
 void 	{printf("void\n");return VOID;}
 main 	{printf("main\n");return MAIN;}
+return 	{printf("return\n");return RETURN;}
 new 	{printf("new\n");return NEW;}
 this	{printf("this\n");return THIS;}
 extends {printf("extends\n");return EXTENDS;}
 #define	{printf("define\n");return DEFINE;}
 true	{printf("true\n");return TRUE;}
 false 	{printf("false\n");return FALSE;}
-int		{printf("int\n");return KINT;}
+int		{printf("int\n");return INT;}
 String 	{printf("String\n");return STRING;}
 boolean {printf("boolean\n");return BOOL;}
 &		{printf("&\n");return AND;}
@@ -46,9 +49,7 @@ boolean {printf("boolean\n");return BOOL;}
 "."		{printf(".\n");return DOT;}
 ".length"	{printf("length\n");return LENGTH;}
 [a-zA-Z][a-zA-Z0-9]*	{printf("id\n");yylval.str = strdup(yytext);return IDENTIFIER;}
-0|[1-9][0-9]*			{yylval.str = strdup(yytext);return INT;}
-\/\/.*\n;
-\/\*.*\*\/	;
+0|[1-9][0-9]*			{printf("num\n");yylval.str = strdup(yytext);return NUM;}
 .			{printf("other charactor\n");return OTHER;}
 %%
 
