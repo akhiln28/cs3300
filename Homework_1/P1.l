@@ -40,11 +40,11 @@ boolean {printf("boolean\n");return BOOL;}
 &		{printf("&\n");return AND;}
 \|		{printf("|\n");return OR;}
 !		{printf("!\n");return NOT;}
+
+
+"System.out.println" 		{printf("System\n");return SYSTEM;}
 "."		{printf(".\n");return DOT;}
-.length	{printf("length\n");return LENGTH;}
-
-
-System.out.println 		{printf("System\n");SYSTEM;}
+".length"	{printf("length\n");return LENGTH;}
 [a-zA-Z][a-zA-Z0-9]*	{printf("id\n");yylval.str = strdup(yytext);return IDENTIFIER;}
 0|[1-9][0-9]*			{yylval.str = strdup(yytext);return INT;}
 \/\/.*\n;

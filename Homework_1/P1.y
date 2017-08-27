@@ -22,7 +22,7 @@
 %type <str> Statement
 %type <str> StatementStar
 %%
-goal :		MacroDefinationstar	{printf("Found Macros\n");}
+goal :		SYSTEM	{printf("Found Macros\n");}
 ;
 MainClass :	CLASS IDENTIFIER LFPAREN PUBLIC STATIC VOID MAIN LPAREN STRING LSPAREN RSPAREN
 			IDENTIFIER RPAREN LFPAREN SYSTEM LPAREN Expression RPAREN SCOLON RFPAREN RFPAREN
