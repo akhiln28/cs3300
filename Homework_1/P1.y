@@ -8,11 +8,10 @@
 %union{
 	char *str;
 }
-%token SCOLON CLASS IF ELSE WHILE LPAREN RPAREN LFPAREN RFPAREN LSPAREN RSPAREN
+%token<str> SCOLON CLASS IF ELSE WHILE LPAREN RPAREN LFPAREN RFPAREN LSPAREN RSPAREN
 		GT LT EQ PLUS MINUS DIV MUL COMMA PUBLIC STATIC VOID MAIN NEW EXTENDS THIS
-		DEFINE TRUE FALSE BOOL AND OR NOT DOT LENGTH SYSTEM KINT OTHER
+		DEFINE TRUE FALSE BOOL AND OR NOT DOT LENGTH SYSTEM KINT OTHER IDENTIFIER INT
 		STRING
-%token<str> IDENTIFIER INT
 %type <str> MacroDefinationstar
 %type <str> MainClass
 %type <str> Expression
@@ -22,7 +21,7 @@
 %type <str> Statement
 %type <str> StatementStar
 %%
-goal :		SYSTEM	{printf("Found Macros\n");}
+goal :		MacroDefinationstar MainClass	{printf("Found Macros\n");}
 ;
 MainClass :	CLASS IDENTIFIER LFPAREN PUBLIC STATIC VOID MAIN LPAREN STRING LSPAREN RSPAREN
 			IDENTIFIER RPAREN LFPAREN SYSTEM LPAREN Expression RPAREN SCOLON RFPAREN RFPAREN
@@ -51,7 +50,8 @@ MacroDefStatement	:	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LFPAREN 
 ;
 MacroDefExpression : 	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LPAREN Expression RPAREN
 ;
-CommaExpressionStar : 	CommaExpressionStar COMMA Expression
+CommaExpressionStar : 	Expression COMMA CommaExpressionStar
+						| Expression
 						| {;}
 ;
 Expression  :		PrimaryExpression AND AND PrimaryExpression
@@ -65,8 +65,8 @@ Expression  :		PrimaryExpression AND AND PrimaryExpression
 					| PrimaryExpression LSPAREN PrimaryExpression RSPAREN
 					| PrimaryExpression LENGTH
 					| PrimaryExpression 
-					| PrimaryExpression DOT IDENTIFIER LPAREN Expression CommaExpressionStar RPAREN
-					| IDENTIFIER LPAREN Expression CommaExpressionStar RPAREN
+					| PrimaryExpression DOT IDENTIFIER LPAREN CommaExpressionStar RPAREN
+					| IDENTIFIER LPAREN CommaExpressionStar RPAREN
 PrimaryExpression 	: 	INT
 						| TRUE
 						| FALSE

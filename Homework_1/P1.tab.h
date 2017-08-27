@@ -83,9 +83,9 @@ extern int yydebug;
     SYSTEM = 293,
     KINT = 294,
     OTHER = 295,
-    STRING = 296,
-    IDENTIFIER = 297,
-    INT = 298
+    IDENTIFIER = 296,
+    INT = 297,
+    STRING = 298
   };
 #endif
 
