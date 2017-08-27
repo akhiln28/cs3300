@@ -42,7 +42,7 @@ StatementStar :		StatementStar Statement
 					| {;}
 ;
 Statement :		LFPAREN StatementStar RFPAREN
-				| SYSTEM LPAREN Expression RPAREN SCOLON
+				| SYSTEM LPAREN Expression RPAREN SCOLON {/*what happens when you macro the print*/;}
 				| IDENTIFIER EQ Expression SCOLON
 				| IDENTIFIER LSPAREN Expression RSPAREN EQ Expression SCOLON
 				| IF LPAREN Expression RPAREN Statement
