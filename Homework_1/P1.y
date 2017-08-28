@@ -79,12 +79,12 @@
 		num_macros++;
 		if(!type)
 		{
-			printf("added Macrostatement\n");
+			//printf("added Macrostatement\n");
 			//printf("%d\n",num_macros);
 		}
 		else
 		{
-			printf("added MacroExpression\n");
+			//printf("added MacroExpression\n");
 			//printf("%d\n",num_macros);
 		}
 	}
@@ -134,13 +134,15 @@
 				exit(0);
 			}
 		}
-		// int n;
-		// char **argList = getList(args,&n);
-		// if(n != List[index].num_arg)
-		// {
-		// 	printf("Failed to parse MacorJava\n");
-		// 	exit(0);
-		// }
+		int n;
+		char **argList = getList(args,&n);
+		if(n != List[index].num_arg)
+		{
+			printf("Failed to parse MacorJava\n");
+			exit(0);
+		}
+		char *ans = (char*)malloc(10000*sizeof(char));
+		strcpy(ans,List[index].replaceWith);
 	}
 %}
 %union{
@@ -170,7 +172,7 @@
 %type <str> goal
 %type <str> prog
 %%
-goal :	prog	{printf("good %s\n",$1);}
+goal :	prog	{printf("%s\n",$1);}
 ;
 prog :		MacroDefinationstar MainClass TypeDeclarationStar
 			{
@@ -184,8 +186,9 @@ MainClass :	CLASS IDENTIFIER LFPAREN PUBLIC STATIC VOID MAIN LPAREN STRING LSPAR
 			{
 				int l = strlen($2) + strlen($12) + strlen($17) + 100;
 				$$ = (char*)malloc(l*sizeof(char));
-				strcpy($$,"class ");strcat($$,$2);strcat($$,"\n{ public static void main(String[]");
-				strcat($$,$12);strcat($$,")\n{\n\tSystem.out.println(");strcat($$,$17);strcat($$,");\n}\n}");
+				strcpy($$,"class ");strcat($$,$2);strcat($$,"\n{\npublic static void main(String[] ");
+				strcat($$,$12);strcat($$,")\n{\n\tSystem.out.println(");strcat($$,$17);
+				strcat($$,");\n}\n}\n");
 				free($2);free($12);free($17);
 			}
 ;
@@ -204,73 +207,73 @@ StatementStar :		Statement StatementStar
 ;
 Expression  :		PrimaryExpression AND AND PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($4) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($4) +20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"&&");strcat($$,$4);
 						free($1);free($4);
 					}
 					| PrimaryExpression OR OR PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($4) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($4) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"||");strcat($$,$4);
 						free($1);free($4);
 					}
 					| PrimaryExpression NOT EQ PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($4) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($4) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"!=");strcat($$,$4);
 						free($1);free($4);
 					}
 					| PrimaryExpression LT EQ PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($4) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($4) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"<=");strcat($$,$4);
 						free($1);free($4);
 					}
 					| PrimaryExpression PLUS PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($3) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"+");strcat($$,$3);
 						free($1);free($3);
 					}
 					| PrimaryExpression MINUS PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($3) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"-");strcat($$,$3);
 						free($1);free($3);
 					}
 					| PrimaryExpression MUL PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($3) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"*");strcat($$,$3);
 						free($1);free($3);
 					}
 					| PrimaryExpression DIV PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($3) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"/");strcat($$,$3);
 						free($1);free($3);
 					}
 					| PrimaryExpression LSPAREN PrimaryExpression RSPAREN
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($3) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"[");strcat($$,$3);strcat($$,"]");
 						free($1);free($3);
 					}
 					| PrimaryExpression LENGTH
 					{
-						$$ = (char*)malloc((strlen($1) + 10)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,".length");
 						free($1);
 					}
 					| PrimaryExpression 
 					{
-						$$ = (char*)malloc((strlen($1) + 10)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + 20)*sizeof(char));
 						strcpy($$,$1);
 						free($1);
 					}
 					| PrimaryExpression DOT IDENTIFIER LPAREN CommaExpressionStar RPAREN
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($3) + strlen($5) + 10)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($3) + strlen($5) + 30)*sizeof(char));
 						strcpy($$,$1);strcat($$,".");strcat($$,$3);
 						strcat($$,"(");strcat($$,$5);strcat($$,")");
 						free($1);free($3);free($5);
@@ -283,7 +286,7 @@ Expression  :		PrimaryExpression AND AND PrimaryExpression
 ;
 Statement :		LFPAREN StatementStar RFPAREN
 				{
-					$$ = (char*)malloc((strlen($2) + 10)*sizeof(char));
+					$$ = (char*)malloc((strlen($2) + 30)*sizeof(char));
 					strcpy($$,"{");strcat($$,$2);strcat($$,"}\n");
 					free($2);
 				}
@@ -295,31 +298,33 @@ Statement :		LFPAREN StatementStar RFPAREN
 				}
 				| IDENTIFIER EQ Expression SCOLON
 				{
-					$$ = (char*)malloc((strlen($1) + strlen($3) + 10)*sizeof(char));
-					strcpy($$,$1);strcat($$,"=");strcat($$,$3);strcat($$,";");
+					$$ = (char*)malloc((strlen($1) + strlen($3) + 30)*sizeof(char));
+					strcpy($$,$1);strcat($$," = ");strcat($$,$3);strcat($$,";\n");
 					free($1);free($3);
 				}
 				| IDENTIFIER LSPAREN Expression RSPAREN EQ Expression SCOLON
 				{
-					$$ = (char*)malloc((strlen($1) + strlen($3) + strlen($6) + 10)*sizeof(char));
-					strcpy($$,$1);strcat($$,"[");strcat($$,$3);strcat($$,"]=");strcat($$,$6);strcat($$,";");
+					$$ = (char*)malloc((strlen($1) + strlen($3) + strlen($6) + 30)*sizeof(char));
+					strcpy($$,$1);strcat($$,"[");strcat($$,$3);strcat($$,"] = ");
+					strcat($$,$6);strcat($$,";\n");
 					free($1);free($3);free($6);
 				}
 				| IF LPAREN Expression RPAREN Statement
 				{
-					$$ = (char*)malloc((strlen($3) + strlen($5) + 10)*sizeof(char));
-					strcpy($$,"if(");strcat($$,$3);strcat($$,")");strcat($$,$5);
+					$$ = (char*)malloc((strlen($3) + strlen($5) + 30)*sizeof(char));
+					strcpy($$,"if(");strcat($$,$3);strcat($$,")\n");strcat($$,$5);
 					free($3);free($5);
 				}
 				| IF LPAREN Expression RPAREN Statement ELSE Statement
 				{
-					$$ = (char*)malloc((strlen($3) + strlen($5) + strlen($7) + 15)*sizeof(char));
-					strcpy($$,"if(");strcat($$,$3);strcat($$,")");strcat($$,$5);strcat($$,$7);
+					$$ = (char*)malloc((strlen($3) + strlen($5) + strlen($7) + 30)*sizeof(char));
+					strcpy($$,"if(");strcat($$,$3);strcat($$,")");strcat($$,$5);
+					strcat($$,"else ");strcat($$,$7);
 					free($3);free($5);free($7);
 				}
 				| WHILE LPAREN Expression RPAREN Statement
 				{
-					$$ = (char*)malloc((strlen($3) + strlen($5) + 10)*sizeof(char));
+					$$ = (char*)malloc((strlen($3) + strlen($5) + 30)*sizeof(char));
 					strcpy($$,"while(");strcat($$,$3);strcat($$,")");strcat($$,$5);
 					free($3);free($5);
 				}
@@ -331,7 +336,7 @@ Statement :		LFPAREN StatementStar RFPAREN
 ;
 CommaIdentifierStar :	IDENTIFIER COMMA CommaIdentifierStar
 						{
-							$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+							$$ = (char*)malloc((strlen($1) + strlen($3) + 10)*sizeof(char));
 							strcpy($$,$1);strcat($$,",");strcat($$,$3);
 							free($1);free($3);
 						}
@@ -357,7 +362,7 @@ MacroDefExpression : 	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LPAREN
 ;
 CommaExpressionStar : 	Expression COMMA CommaExpressionStar
 						{
-							$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+							$$ = (char*)malloc((strlen($1) + strlen($3) + 10)*sizeof(char));
 							strcpy($$,$1);strcat($$,",");strcat($$,$3);
 							free($1);free($3);
 						}
@@ -386,35 +391,35 @@ PrimaryExpression 	: 	NUM
 						| THIS	{$$ = (char*)malloc(10*sizeof(char));strcpy($$,"this");}
 						| NEW INT LSPAREN Expression RSPAREN
 						{
-							$$ = (char*)malloc((strlen($4) + 15)*sizeof(char));
-							strcpy($$,"new ");strcat($$,"int ");strcat($$,"[");
+							$$ = (char*)malloc((strlen($4) + 30)*sizeof(char));
+							strcpy($$,"new ");strcat($$,"int");strcat($$,"[");
 							strcat($$,$4);strcat($$,"]");
 							free($4);
 						}
 						| NEW IDENTIFIER LPAREN RPAREN
 						{
-							$$ = (char*)malloc((strlen($2) + 10)*sizeof(char));
+							$$ = (char*)malloc((strlen($2) + 20)*sizeof(char));
 							strcpy($$,"new ");strcat($$,$2);strcat($$,"()");
 							free($2);
 						}
 						| NOT Expression
 						{
-							$$ = (char*)malloc((strlen($2) + 10)*sizeof(char));
+							$$ = (char*)malloc((strlen($2) + 20)*sizeof(char));
 							strcpy($$,"!");strcat($$,$2);
 							free($2);
 						}
 						| LPAREN Expression RPAREN
 						{
-							$$ = (char*)malloc((strlen($2) + 10)*sizeof(char));
+							$$ = (char*)malloc((strlen($2) + 20)*sizeof(char));
 							strcpy($$,"(");strcat($$,$2);strcat($$,")");
 							free($2);
 						}
 ;
-Type 	: 	INT {$$ = (char*)malloc(10*sizeof(char));strcpy($$,"int ");}
-			| BOOL	{$$ = (char*)malloc(10*sizeof(char));strcpy($$,"boolean ");}
+Type 	: 	INT {$$ = (char*)malloc(10*sizeof(char));strcpy($$,"int");}
+			| BOOL	{$$ = (char*)malloc(10*sizeof(char));strcpy($$,"boolean");}
 			| INT LSPAREN RSPAREN
 			{
-				$$ = (char*)malloc(10*sizeof(char));strcpy($$,"int[] ");
+				$$ = (char*)malloc(10*sizeof(char));strcpy($$,"int[]");
 			}
 			| IDENTIFIER 
 			{
@@ -426,7 +431,7 @@ Type 	: 	INT {$$ = (char*)malloc(10*sizeof(char));strcpy($$,"int ");}
 TypeIdentifierStar 	:	TypeIdentifierStar Type IDENTIFIER SCOLON
 						{
 							$$ = (char*)malloc((strlen($1) + strlen($2) + strlen($3) + 10)*sizeof(char));
-							strcpy($$,$1);strcat($$,$2);strcat($$,$3);strcat($$,";");
+							strcpy($$,$1);strcat($$,$2);strcat($$," ");strcat($$,$3);strcat($$,";\n");
 							free($1);free($2);free($3);
 						}
 						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
@@ -434,13 +439,13 @@ TypeIdentifierStar 	:	TypeIdentifierStar Type IDENTIFIER SCOLON
 CommaTypeIdentifier :	Type IDENTIFIER 
 						{
 							$$ = (char*)malloc((strlen($1) + strlen($2) + 5)*sizeof(char));
-							strcpy($$,$1);strcat($$,$2);
+							strcpy($$,$1);strcat($$," ");strcat($$,$2);
 							free($1);free($2);
 						}
 						| Type IDENTIFIER COMMA CommaTypeIdentifier
 						{
 							$$ = (char*)malloc((strlen($1) + strlen($2) + strlen($4) + 10)*sizeof(char));
-							strcpy($$,$1);strcat($$,$2);strcat($$,",");strcat($$,$4);
+							strcpy($$,$1);strcat($$," ");strcat($$,$2);strcat($$,",");strcat($$,$4);
 							free($1);free($2);free($4);
 						}
 						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
@@ -448,16 +453,16 @@ CommaTypeIdentifier :	Type IDENTIFIER
 MethodDeclaration	:	PUBLIC Type IDENTIFIER LPAREN CommaTypeIdentifier RPAREN LFPAREN TypeIdentifierStar 
 						StatementStar RETURN Expression SCOLON RFPAREN
 						{
-							int l = strlen($8) + strlen($9) + strlen($11) + 20;
+							int l = strlen($8) + strlen($9) + strlen($11) + 40;
 							$$ = (char*)malloc((strlen($2) + strlen($3) + strlen($5) + l)*sizeof(char));
-							strcpy($$,"public ");strcat($$,$2);strcat($$,$3);strcat($$,"(");
-							strcat($$,$5);strcat($$,"){");strcat($$,$8);strcat($$,$9);strcat($$,"return");
-							strcat($$,$11);strcat($$,";}");
+							strcpy($$,"public ");strcat($$,$2);strcat($$," ");strcat($$,$3);strcat($$,"(");
+							strcat($$,$5);strcat($$,")\n{\n");strcat($$,$8);strcat($$,$9);
+							strcat($$,"return ");strcat($$,$11);strcat($$,";\n}\n");
 						}
 ;
 MethodDeclarationStar	:	MethodDeclaration MethodDeclarationStar
 							{
-								$$ = (char*)malloc((strlen($1) + strlen($2) + 10)*sizeof(char));
+								$$ = (char*)malloc((strlen($1) + strlen($2) + 30)*sizeof(char));
 								strcpy($$,$1);strcat($$,$2);
 								free($1);free($2);
 							}
@@ -465,9 +470,9 @@ MethodDeclarationStar	:	MethodDeclaration MethodDeclarationStar
 ;
 TypeDeclaration	:	CLASS IDENTIFIER LFPAREN TypeIdentifierStar MethodDeclarationStar RFPAREN
 					{
-						$$ = (char*)malloc((strlen($2) + strlen($4) + strlen($5) + 15)*sizeof(char));
-						strcpy($$,"class ");strcat($$,$2);strcat($$,"{");strcat($$,$4);
-						strcat($$,$5);strcat($$,"}");
+						$$ = (char*)malloc((strlen($2) + strlen($4) + strlen($5) + 30)*sizeof(char));
+						strcpy($$,"class ");strcat($$,$2);strcat($$,"\n{\n");strcat($$,$4);
+						strcat($$,$5);strcat($$,"\n}\n");
 						free($5);free($2);free($4);
 					}
 					| CLASS IDENTIFIER EXTENDS IDENTIFIER LFPAREN TypeIdentifierStar 
@@ -475,14 +480,14 @@ TypeDeclaration	:	CLASS IDENTIFIER LFPAREN TypeIdentifierStar MethodDeclarationS
 					{
 						int l = strlen($6) + strlen($7) + 15;
 						$$ = (char*)malloc((strlen($2) + strlen($4) + l)*sizeof(char));
-						strcpy($$,"class ");strcat($$,$2);strcat($$,"extends");strcat($$,$4);
-						strcat($$,"{");strcat($$,$6);strcat($$,$7);strcat($$,"}");
+						strcpy($$,"class ");strcat($$,$2);strcat($$,"extends ");strcat($$,$4);
+						strcat($$,"\n{\n");strcat($$,$6);strcat($$,$7);strcat($$,"\n}\n");
 						free($6);free($2);free($4);free($7);
 					}
 ;
 TypeDeclarationStar :	TypeDeclaration TypeDeclarationStar
 						{
-							$$ = (char*)malloc((strlen($1) + strlen($2) + 10)*sizeof(char));
+							$$ = (char*)malloc((strlen($1) + strlen($2) + 30)*sizeof(char));
 							strcpy($$,$1);strcat($$,$2);
 							free($1);free($2);
 						}
