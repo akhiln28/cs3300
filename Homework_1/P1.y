@@ -2,8 +2,144 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
+	#include <stdbool.h>
 	int yylex();
 	int yyerror();
+
+	typedef struct Macro_
+	{
+		char *id;
+		char *replaceWith;
+		char **argList;
+		int num_arg;
+		bool type;
+	}Macro;
+	Macro List[10000];
+	int num_macros = 0;
+
+	char** getList(char *args,int *n)
+	{
+		int i;
+		//size of list
+		int l = strlen(args);
+		*n = 1;
+		for(i = 0;i < l;i++)
+		{
+			if(args[i] == ',')
+			{
+				(*n)++;
+			}
+		}
+		char **list = (char**)malloc((*n)*sizeof(char*));
+		for(i = 0;i < *n;i++)
+		{
+			list[i] = (char*)malloc((l)*sizeof(char));
+		}
+		int j = 0,k = 0;
+		for(i = 0;i < l;i++)
+		{
+			if(args[i] == ',')
+			{
+				list[j][k] = '\0';
+				k = 0;
+				j++;
+			}
+			else
+			{
+				list[j][k] = args[i];
+				k++;
+			}
+		}
+		return list;
+	}
+	void addMacro(char *id,char *args,bool type,char *replaceWith)
+	{
+		//we need to check if the Macro is already present
+		int i = 0;
+		for(i = 0;i < num_macros;i++)
+		{
+			if(strcmp(id,List[i].id) == 0)
+			{
+				printf("Failed, macro already present\n");
+				exit(0);
+			}
+		}
+		//if id is not already present
+		int n;
+		List[num_macros].id = id;
+		List[num_macros].argList = getList(args,&n);
+		List[num_macros].replaceWith = replaceWith;
+		List[num_macros].type = type;
+		List[num_macros].num_arg = n;
+		num_macros++;
+		if(!type)
+		{
+			printf("added Macrostatement\n");
+			//printf("%d\n",num_macros);
+		}
+		else
+		{
+			printf("added MacroExpression\n");
+			//printf("%d\n",num_macros);
+		}
+		for(i = 0;i < num_macros;i++)
+		{
+			int j = 0;
+			while(List[i].id[j] != '\0')
+			{
+				printf("%c",List[i].id[j]);
+				j++;
+			}
+			printf("\n");
+		}
+	}
+
+	char *replace(char *id,char *args,bool type)
+	{
+		//first we have to find the index of id
+		int index = 0;
+		bool flag = false;
+		for(index = 0;index < num_macros;index++)
+		{
+			if(strcmp(id,List[index].id) == 0 && List[index].type == type)
+			{
+				break;
+				flag = true;
+			}
+		}
+		//if the id is not present in the array, then it should be an error
+		if(!flag)
+		{
+			if(!type)
+			{
+				printf("Failed,macro is absent, unable to replace in Macrostatement\n");
+			}
+			else
+			{
+				printf("Failed,macro is absent, unable to replace in MacroExpression\n");	
+			}
+			exit(0);
+		}
+		if(args == NULL)
+		{
+			if(List[index].num_arg == 0)
+			{
+				return List[index].replaceWith;
+			}
+			else
+			{
+				printf("Failed,Incorrect arguments passed in replace\n");
+				exit(0);
+			}
+		}
+		// int n;
+		// char **argList = getList(args,&n);
+		// if(n != List[index].num_arg)
+		// {
+		// 	printf("Failed to parse MacorJava\n");
+		// 	exit(0);
+		// }
+	}
 %}
 %union{
 	char *str;
@@ -108,8 +244,8 @@ Statement :		LFPAREN StatementStar RFPAREN
 				}
 				|IDENTIFIER LPAREN CommaExpressionStar RPAREN SCOLON
 				{
-					$$ = (char*)malloc((strlen($1) + strlen($3) + 10)*sizeof(char));
-					strcpy($$,$1);strcat($$,"(");strcat($$,$3);strcat($$,");");
+					//here i need to replace this production(Macrostatement)
+					$$ = replace($1,$3,false);
 					free($1);free($3);
 				}
 ;
@@ -129,12 +265,16 @@ CommaIdentifierStar :	IDENTIFIER COMMA CommaIdentifierStar
 ;
 MacroDefStatement	:	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LFPAREN StatementStar RFPAREN
 						{
-
+							//need to add the macro of type 0
+							addMacro($2,$4,false,$7);
+							free($2);free($4);free($7);
 						}
 ;
 MacroDefExpression : 	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LPAREN Expression RPAREN
 						{
-
+							//need to add macro of type 1
+							addMacro($2,$4,true,$7);
+							free($2);free($4);free($7);
 						}
 ;
 CommaExpressionStar : 	Expression COMMA CommaExpressionStar
@@ -226,8 +366,10 @@ Expression  :		PrimaryExpression AND AND PrimaryExpression
 					}
 					| IDENTIFIER LPAREN CommaExpressionStar RPAREN
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
-						strcpy($$,$1);strcat($$,"(");strcat($$,$3);strcat($$,")");
+						//here i need to replace this production(MacroExpression)
+						$$ = replace($1,$3,true);
+						// $$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+						// strcpy($$,$1);strcat($$,"(");strcat($$,$3);strcat($$,")");
 						free($1);free($3);
 					}
 ;
