@@ -200,97 +200,6 @@ StatementStar :		Statement StatementStar
 					}
 					| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
-Statement :		LFPAREN StatementStar RFPAREN
-				{
-					$$ = (char*)malloc((strlen($2) + 10)*sizeof(char));
-					strcpy($$,"{");strcat($$,$2);strcat($$,"}\n");
-					free($2);
-				}
-				| SYSTEM LPAREN Expression RPAREN SCOLON {/*what happens when you macro the print*/;}
-				{
-					$$ = (char*)malloc((strlen($3) + 30)*sizeof(char));
-					strcpy($$,"System.out.println(");strcat($$,$3);strcat($$,");\n");
-					free($3);
-				}
-				| IDENTIFIER EQ Expression SCOLON
-				{
-					$$ = (char*)malloc((strlen($1) + strlen($3) + 10)*sizeof(char));
-					strcpy($$,$1);strcat($$,"=");strcat($$,$3);strcat($$,";");
-					free($1);free($3);
-				}
-				| IDENTIFIER LSPAREN Expression RSPAREN EQ Expression SCOLON
-				{
-					$$ = (char*)malloc((strlen($1) + strlen($3) + strlen($6) + 10)*sizeof(char));
-					strcpy($$,$1);strcat($$,"[");strcat($$,$3);strcat($$,"]=");strcat($$,$6);strcat($$,";");
-					free($1);free($3);free($6);
-				}
-				| IF LPAREN Expression RPAREN Statement
-				{
-					$$ = (char*)malloc((strlen($3) + strlen($5) + 10)*sizeof(char));
-					strcpy($$,"if(");strcat($$,$3);strcat($$,")");strcat($$,$5);
-					free($3);free($5);
-				}
-				| IF LPAREN Expression RPAREN Statement ELSE Statement
-				{
-					$$ = (char*)malloc((strlen($3) + strlen($5) + strlen($7) + 15)*sizeof(char));
-					strcpy($$,"if(");strcat($$,$3);strcat($$,")");strcat($$,$5);strcat($$,$7);
-					free($3);free($5);free($7);
-				}
-				| WHILE LPAREN Expression RPAREN Statement
-				{
-					$$ = (char*)malloc((strlen($3) + strlen($5) + 10)*sizeof(char));
-					strcpy($$,"while(");strcat($$,$3);strcat($$,")");strcat($$,$5);
-					free($3);free($5);
-				}
-				|IDENTIFIER LPAREN CommaExpressionStar RPAREN SCOLON
-				{
-					//here i need to replace this production(Macrostatement)
-					$$ = replace($1,$3,false);
-					free($1);free($3);
-				}
-;
-CommaIdentifierStar :	IDENTIFIER COMMA CommaIdentifierStar
-						{
-							$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
-							strcpy($$,$1);strcat($$,",");strcat($$,$3);
-							free($1);free($3);
-						}
-						| IDENTIFIER
-						{
-							$$ = (char*)malloc(strlen($1)*sizeof(char));
-							strcpy($$,$1);
-							free($1);
-						}
-						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
-;
-MacroDefStatement	:	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LFPAREN StatementStar RFPAREN
-						{
-							//need to add the macro of type 0
-							addMacro($2,$4,false,$7);
-							free($2);free($4);free($7);
-						}
-;
-MacroDefExpression : 	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LPAREN Expression RPAREN
-						{
-							//need to add macro of type 1
-							addMacro($2,$4,true,$7);
-							free($2);free($4);free($7);
-						}
-;
-CommaExpressionStar : 	Expression COMMA CommaExpressionStar
-						{
-							$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
-							strcpy($$,$1);strcat($$,",");strcat($$,$3);
-							free($1);free($3);
-						}
-						| Expression
-						{
-							$$ = (char*)malloc(strlen($1)*sizeof(char));
-							strcpy($$,$1);
-							free($1);
-						}
-						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
-;
 Expression  :		PrimaryExpression AND AND PrimaryExpression
 					{
 						$$ = (char*)malloc((strlen($1) + strlen($4) + 5)*sizeof(char));
@@ -368,10 +277,95 @@ Expression  :		PrimaryExpression AND AND PrimaryExpression
 					{
 						//here i need to replace this production(MacroExpression)
 						$$ = replace($1,$3,true);
-						// $$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
-						// strcpy($$,$1);strcat($$,"(");strcat($$,$3);strcat($$,")");
-						free($1);free($3);
 					}
+;
+Statement :		LFPAREN StatementStar RFPAREN
+				{
+					$$ = (char*)malloc((strlen($2) + 10)*sizeof(char));
+					strcpy($$,"{");strcat($$,$2);strcat($$,"}\n");
+					free($2);
+				}
+				| SYSTEM LPAREN Expression RPAREN SCOLON {/*what happens when you macro the print*/;}
+				{
+					$$ = (char*)malloc((strlen($3) + 30)*sizeof(char));
+					strcpy($$,"System.out.println(");strcat($$,$3);strcat($$,");\n");
+					free($3);
+				}
+				| IDENTIFIER EQ Expression SCOLON
+				{
+					$$ = (char*)malloc((strlen($1) + strlen($3) + 10)*sizeof(char));
+					strcpy($$,$1);strcat($$,"=");strcat($$,$3);strcat($$,";");
+					free($1);free($3);
+				}
+				| IDENTIFIER LSPAREN Expression RSPAREN EQ Expression SCOLON
+				{
+					$$ = (char*)malloc((strlen($1) + strlen($3) + strlen($6) + 10)*sizeof(char));
+					strcpy($$,$1);strcat($$,"[");strcat($$,$3);strcat($$,"]=");strcat($$,$6);strcat($$,";");
+					free($1);free($3);free($6);
+				}
+				| IF LPAREN Expression RPAREN Statement
+				{
+					$$ = (char*)malloc((strlen($3) + strlen($5) + 10)*sizeof(char));
+					strcpy($$,"if(");strcat($$,$3);strcat($$,")");strcat($$,$5);
+					free($3);free($5);
+				}
+				| IF LPAREN Expression RPAREN Statement ELSE Statement
+				{
+					$$ = (char*)malloc((strlen($3) + strlen($5) + strlen($7) + 15)*sizeof(char));
+					strcpy($$,"if(");strcat($$,$3);strcat($$,")");strcat($$,$5);strcat($$,$7);
+					free($3);free($5);free($7);
+				}
+				| WHILE LPAREN Expression RPAREN Statement
+				{
+					$$ = (char*)malloc((strlen($3) + strlen($5) + 10)*sizeof(char));
+					strcpy($$,"while(");strcat($$,$3);strcat($$,")");strcat($$,$5);
+					free($3);free($5);
+				}
+				|IDENTIFIER LPAREN CommaExpressionStar RPAREN SCOLON
+				{
+					//here i need to replace this production(Macrostatement)
+					$$ = replace($1,$3,false);
+				}
+;
+CommaIdentifierStar :	IDENTIFIER COMMA CommaIdentifierStar
+						{
+							$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+							strcpy($$,$1);strcat($$,",");strcat($$,$3);
+							free($1);free($3);
+						}
+						| IDENTIFIER
+						{
+							$$ = (char*)malloc(strlen($1)*sizeof(char));
+							strcpy($$,$1);
+							free($1);
+						}
+						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
+;
+MacroDefStatement	:	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LFPAREN StatementStar RFPAREN
+						{
+							//need to add the macro of type 0
+							addMacro($2,$4,false,$7);
+						}
+;
+MacroDefExpression : 	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LPAREN Expression RPAREN
+						{
+							//need to add macro of type 1
+							addMacro($2,$4,true,$7);
+						}
+;
+CommaExpressionStar : 	Expression COMMA CommaExpressionStar
+						{
+							$$ = (char*)malloc((strlen($1) + strlen($3) + 5)*sizeof(char));
+							strcpy($$,$1);strcat($$,",");strcat($$,$3);
+							free($1);free($3);
+						}
+						| Expression
+						{
+							$$ = (char*)malloc(strlen($1)*sizeof(char));
+							strcpy($$,$1);
+							free($1);
+						}
+						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 PrimaryExpression 	: 	NUM
 						{
