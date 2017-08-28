@@ -207,7 +207,7 @@ StatementStar :		Statement StatementStar
 ;
 Expression  :		PrimaryExpression AND AND PrimaryExpression
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($4) +20)*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($4) + 20)*sizeof(char));
 						strcpy($$,$1);strcat($$,"&&");strcat($$,$4);
 						free($1);free($4);
 					}
@@ -292,7 +292,7 @@ Statement :		LFPAREN StatementStar RFPAREN
 				}
 				| SYSTEM LPAREN Expression RPAREN SCOLON {/*what happens when you macro the print*/;}
 				{
-					$$ = (char*)malloc((strlen($3) + 30)*sizeof(char));
+					$$ = (char*)malloc((strlen($3) + 40)*sizeof(char));
 					strcpy($$,"System.out.println(");strcat($$,$3);strcat($$,");\n");
 					free($3);
 				}
@@ -478,7 +478,7 @@ TypeDeclaration	:	CLASS IDENTIFIER LFPAREN TypeIdentifierStar MethodDeclarationS
 					| CLASS IDENTIFIER EXTENDS IDENTIFIER LFPAREN TypeIdentifierStar 
 					  MethodDeclarationStar RFPAREN
 					{
-						int l = strlen($6) + strlen($7) + 15;
+						int l = strlen($6) + strlen($7) + 40;
 						$$ = (char*)malloc((strlen($2) + strlen($4) + l)*sizeof(char));
 						strcpy($$,"class ");strcat($$,$2);strcat($$,"extends ");strcat($$,$4);
 						strcat($$,"\n{\n");strcat($$,$6);strcat($$,$7);strcat($$,"\n}\n");
