@@ -19,6 +19,7 @@
 
 	char** getList(char *args,int *n)
 	{
+
 		int i;
 		//size of list
 		int l = strlen(args);
@@ -29,6 +30,10 @@
 			{
 				(*n)++;
 			}
+		}
+		if(strcmp(args,"") == 0)
+		{
+			*n = 0;
 		}
 		char **list = (char**)malloc((*n)*sizeof(char*));
 		for(i = 0;i < *n;i++)
@@ -93,8 +98,8 @@
 		{
 			if(strcmp(id,List[index].id) == 0)
 			{
-				break;
 				flag = true;
+				break;
 			}
 		}
 		// int i = 0;
@@ -117,7 +122,7 @@
 			}
 			exit(0);
 		}
-		if(args == NULL)
+		if(strcmp(args,"") == 0)
 		{
 			if(List[index].num_arg == 0)
 			{
