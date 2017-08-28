@@ -34,7 +34,7 @@
 %%
 goal :	prog	{printf("good %s\n",$1);}
 ;
-prog :		TypeIdentifierStar StatementStar RETURN Expression SCOLON
+prog :		MethodDeclaration
 			{
 				// $$ = (char*)malloc((strlen($2) + strlen($3) + 10)*sizeof(char));
 				// strcpy($$,$2);strcat($$,$3);
@@ -56,7 +56,7 @@ MacroDefinationstar :	MacroDefinationstar MacroDefination
 ;
 MacroDefination :	MacroDefExpression | MacroDefStatement
 ;
-StatementStar :		StatementStar Statement
+StatementStar :		Statement StatementStar
 					{
 						$$ = (char*)malloc((strlen($1) + strlen($2) + 10)*sizeof(char));
 						strcpy($$,$1);strcat($$,$2);
