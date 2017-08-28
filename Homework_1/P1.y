@@ -86,24 +86,24 @@
 
 	char *replace(char *id,char *args,bool type)
 	{
-		printf("test\n");
 		//first we have to find the index of id
 		int index = 0;
 		bool flag = false;
 		for(index = 0;index < num_macros;index++)
 		{
-			if(strcmp(id,List[index].id) == 0 && List[index].type == type)
+			if(strcmp(id,List[index].id) == 0)
 			{
 				break;
 				flag = true;
 			}
 		}
-		printf("printing macros\n");
-		for(i = 0;i < num_macros;i++)
-		{
-			printf("%s\n",List[i].id);
-		}
-		printf("%s\n",id);
+		// int i = 0;
+		// printf("printing macros\n");
+		// for(i = 0;i < num_macros;i++)
+		// {
+		// 	printf("%s\n",List[i].id);
+		// }
+		// printf("%s\n",id);
 		//if the id is not present in the array, then it should be an error
 		if(!flag)
 		{
