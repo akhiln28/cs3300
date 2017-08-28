@@ -37,7 +37,11 @@ prog :		MacroDefinationstar MainClass TypeDeclarationStar
 MainClass :	CLASS IDENTIFIER LFPAREN PUBLIC STATIC VOID MAIN LPAREN STRING LSPAREN RSPAREN
 			IDENTIFIER RPAREN LFPAREN SYSTEM LPAREN Expression RPAREN SCOLON RFPAREN RFPAREN
 			{
-
+				int l = strlen($2) + strlen($12) + strlen($17) + 100;
+				$$ = (char*)malloc(l*sizeof(char));
+				strcpy($$,"class ");strcat($$,$2);strcat($$,"{ public static void main(String[]");
+				strcat($$,$12);strcat($$,"){System.out.println(");strcat($$,$17);strcat($$,");}}");
+				free($2);free($12);free($17);
 			}
 ;
 MacroDefinationstar :	MacroDefinationstar MacroDefination
@@ -46,6 +50,11 @@ MacroDefinationstar :	MacroDefinationstar MacroDefination
 MacroDefination :	MacroDefExpression | MacroDefStatement
 ;
 StatementStar :		StatementStar Statement
+					{
+						$$ = (char*)malloc((strlen($1) + strlen($2))*sizeof(char));
+						strcpy($$,$1);strcat($$,$2);
+						free($1);free($2);
+					}
 					| {;}
 ;
 Statement :		LFPAREN StatementStar RFPAREN
@@ -310,13 +319,28 @@ MethodDeclarationStar	:	MethodDeclaration MethodDeclarationStar
 							| {;}
 ;
 TypeDeclaration	:	CLASS IDENTIFIER LFPAREN TypeIdentifierStar MethodDeclarationStar RFPAREN
+					{
+						$$ = (char*)malloc((strlen($2) + strlen($4) + strlen($5) + 15)*sizeof(char));
+						strcpy($$,"class ");strcat($$,$2);strcat($$,"{");strcat($$,$4);
+						strcat($$,$5);strcat($$,"}"):
+						free($5);free($2);free($4);
+					}
 					| CLASS IDENTIFIER EXTENDS IDENTIFIER LFPAREN TypeIdentifierStar 
 					  MethodDeclarationStar RFPAREN
 					{
-						
+						int l = strlen($6) + strlen($7) + 15;
+						$$ = (char*)malloc((strlen($2) + strlen($4) + l)*sizeof(char));
+						strcpy($$,"class ");strcat($$,$2);strcat($$,"extends");strcat($$,$4);
+						strcat($$,"{");strcat($$,$6);strcat($$,$7);strcat($$,"}");
+						free($6);free($2);free($4);free($7);
 					}
 ;
 TypeDeclarationStar :	TypeDeclaration TypeDeclarationStar
+						{
+							$$ = (char*)malloc((strlen($1) + strlen($2))*sizeof(char));
+							strcpy($$,$1);strcat($$,$2);
+							free($1);free($2);
+						}
 						| {;}
 ;
 %%
