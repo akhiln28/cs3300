@@ -82,20 +82,11 @@
 			printf("added MacroExpression\n");
 			//printf("%d\n",num_macros);
 		}
-		for(i = 0;i < num_macros;i++)
-		{
-			int j = 0;
-			while(List[i].id[j] != '\0')
-			{
-				printf("%c",List[i].id[j]);
-				j++;
-			}
-			printf("\n");
-		}
 	}
 
 	char *replace(char *id,char *args,bool type)
 	{
+		printf("test\n");
 		//first we have to find the index of id
 		int index = 0;
 		bool flag = false;
@@ -107,6 +98,12 @@
 				flag = true;
 			}
 		}
+		printf("printing macros\n");
+		for(i = 0;i < num_macros;i++)
+		{
+			printf("%s\n",List[i].id);
+		}
+		printf("%s\n",id);
 		//if the id is not present in the array, then it should be an error
 		if(!flag)
 		{
