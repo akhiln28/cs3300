@@ -34,11 +34,11 @@
 %%
 goal :	prog	{printf("good %s\n",$1);}
 ;
-prog :		MethodDeclaration
+prog :		MacroDefinationstar MainClass TypeDeclarationStar
 			{
-				// $$ = (char*)malloc((strlen($2) + strlen($3) + 10)*sizeof(char));
-				// strcpy($$,$2);strcat($$,$3);
-				// free($2);free($3);
+				$$ = (char*)malloc((strlen($2) + strlen($3) + 10)*sizeof(char));
+				strcpy($$,$2);strcat($$,$3);
+				free($2);free($3);
 			}
 ;
 MainClass :	CLASS IDENTIFIER LFPAREN PUBLIC STATIC VOID MAIN LPAREN STRING LSPAREN RSPAREN
