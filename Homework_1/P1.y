@@ -22,25 +22,32 @@
 %type <str> StatementStar
 %type <str> TypeIdentifierStar
 %type <str> CommaTypeIdentifier
+%type <str> CommaExpressionStar
+%type <str> CommaIdentifierStar
 %type <str> MethodDeclaration
 %type <str> MethodDeclarationStar
 %type <str> TypeDeclaration
 %type <str> TypeDeclarationStar
 %type <str> Type
+%type <str> goal
+%type <str> prog
 %%
-goal :	prog	{printf("%s\n",$1);}
+goal :	prog	{printf("good %s\n",$1);}
 ;
-prog :		MacroDefinationstar MainClass TypeDeclarationStar	
-			{$$ = (char*)malloc((strlen($2) + strlen($3))*sizeof(char));
-			strcpy($$,$2);strcat($$,$3);free($2);free($3);}
+prog :		TypeIdentifierStar StatementStar RETURN Expression SCOLON
+			{
+				// $$ = (char*)malloc((strlen($2) + strlen($3) + 10)*sizeof(char));
+				// strcpy($$,$2);strcat($$,$3);
+				// free($2);free($3);
+			}
 ;
 MainClass :	CLASS IDENTIFIER LFPAREN PUBLIC STATIC VOID MAIN LPAREN STRING LSPAREN RSPAREN
 			IDENTIFIER RPAREN LFPAREN SYSTEM LPAREN Expression RPAREN SCOLON RFPAREN RFPAREN
 			{
 				int l = strlen($2) + strlen($12) + strlen($17) + 100;
 				$$ = (char*)malloc(l*sizeof(char));
-				strcpy($$,"class ");strcat($$,$2);strcat($$,"{ public static void main(String[]");
-				strcat($$,$12);strcat($$,"){System.out.println(");strcat($$,$17);strcat($$,");}}");
+				strcpy($$,"class ");strcat($$,$2);strcat($$,"\n{ public static void main(String[]");
+				strcat($$,$12);strcat($$,")\n{\n\tSystem.out.println(");strcat($$,$17);strcat($$,");\n}\n}");
 				free($2);free($12);free($17);
 			}
 ;
@@ -51,11 +58,11 @@ MacroDefination :	MacroDefExpression | MacroDefStatement
 ;
 StatementStar :		StatementStar Statement
 					{
-						$$ = (char*)malloc((strlen($1) + strlen($2))*sizeof(char));
+						$$ = (char*)malloc((strlen($1) + strlen($2) + 10)*sizeof(char));
 						strcpy($$,$1);strcat($$,$2);
 						free($1);free($2);
 					}
-					| {;}
+					| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 Statement :		LFPAREN StatementStar RFPAREN
 				{
@@ -65,9 +72,9 @@ Statement :		LFPAREN StatementStar RFPAREN
 				}
 				| SYSTEM LPAREN Expression RPAREN SCOLON {/*what happens when you macro the print*/;}
 				{
-					$$ = (char*)malloc((strlen($1) + strlen($3) + 10)*sizeof(char));
+					$$ = (char*)malloc((strlen($3) + 30)*sizeof(char));
 					strcpy($$,"System.out.println(");strcat($$,$3);strcat($$,");\n");
-					free($1);free($3);
+					free($3);
 				}
 				| IDENTIFIER EQ Expression SCOLON
 				{
@@ -118,7 +125,7 @@ CommaIdentifierStar :	IDENTIFIER COMMA CommaIdentifierStar
 							strcpy($$,$1);
 							free($1);
 						}
-						| {;}
+						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 MacroDefStatement	:	DEFINE IDENTIFIER LPAREN CommaIdentifierStar RPAREN LFPAREN StatementStar RFPAREN
 						{
@@ -142,7 +149,7 @@ CommaExpressionStar : 	Expression COMMA CommaExpressionStar
 							strcpy($$,$1);
 							free($1);
 						}
-						| {;}
+						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 Expression  :		PrimaryExpression AND AND PrimaryExpression
 					{
@@ -284,7 +291,7 @@ TypeIdentifierStar 	:	TypeIdentifierStar Type IDENTIFIER SCOLON
 							strcpy($$,$1);strcat($$,$2);strcat($$,$3);strcat($$,";");
 							free($1);free($2);free($3);
 						}
-						| {;}
+						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 CommaTypeIdentifier :	Type IDENTIFIER 
 						{
@@ -298,7 +305,7 @@ CommaTypeIdentifier :	Type IDENTIFIER
 							strcpy($$,$1);strcat($$,$2);strcat($$,",");strcat($$,$4);
 							free($1);free($2);free($4);
 						}
-						| {;}
+						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 MethodDeclaration	:	PUBLIC Type IDENTIFIER LPAREN CommaTypeIdentifier RPAREN LFPAREN TypeIdentifierStar 
 						StatementStar RETURN Expression SCOLON RFPAREN
@@ -312,17 +319,17 @@ MethodDeclaration	:	PUBLIC Type IDENTIFIER LPAREN CommaTypeIdentifier RPAREN LFP
 ;
 MethodDeclarationStar	:	MethodDeclaration MethodDeclarationStar
 							{
-								$$ = (char*)malloc((strlen($1) + strlen($2))*sizeof(char));
+								$$ = (char*)malloc((strlen($1) + strlen($2) + 10)*sizeof(char));
 								strcpy($$,$1);strcat($$,$2);
 								free($1);free($2);
 							}
-							| {;}
+							| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 TypeDeclaration	:	CLASS IDENTIFIER LFPAREN TypeIdentifierStar MethodDeclarationStar RFPAREN
 					{
 						$$ = (char*)malloc((strlen($2) + strlen($4) + strlen($5) + 15)*sizeof(char));
 						strcpy($$,"class ");strcat($$,$2);strcat($$,"{");strcat($$,$4);
-						strcat($$,$5);strcat($$,"}"):
+						strcat($$,$5);strcat($$,"}");
 						free($5);free($2);free($4);
 					}
 					| CLASS IDENTIFIER EXTENDS IDENTIFIER LFPAREN TypeIdentifierStar 
@@ -337,10 +344,10 @@ TypeDeclaration	:	CLASS IDENTIFIER LFPAREN TypeIdentifierStar MethodDeclarationS
 ;
 TypeDeclarationStar :	TypeDeclaration TypeDeclarationStar
 						{
-							$$ = (char*)malloc((strlen($1) + strlen($2))*sizeof(char));
+							$$ = (char*)malloc((strlen($1) + strlen($2) + 10)*sizeof(char));
 							strcpy($$,$1);strcat($$,$2);
 							free($1);free($2);
 						}
-						| {;}
+						| {$$=(char*)malloc(2*sizeof(char));strcpy($$,"");}
 ;
 %%
